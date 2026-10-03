@@ -8,7 +8,7 @@ final class DisplayStore: ObservableObject {
     @Published var sharedBrightness: Double = 0.5
     @Published var notice: String?
     @Published private(set) var pendingChange: String?
-    @Published private(set) var keyboardControlEnabled = UserDefaults.standard.bool(forKey: "keyboardBrightnessEnabled")
+    @Published private(set) var keyboardControlEnabled = UserDefaults.standard.object(forKey: "keyboardBrightnessEnabled") as? Bool ?? true
     @Published private(set) var keyboardTarget = KeyboardDisplayTarget(rawValue: UserDefaults.standard.string(forKey: "keyboardBrightnessTarget") ?? "") ?? .pointer
     @Published private(set) var keyboardStatus: String?
     @Published private(set) var hasBlackout = false
