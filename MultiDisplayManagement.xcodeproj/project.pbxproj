@@ -1,0 +1,380 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		06AEE7C1602A6B9254043952 /* BrightnessHUDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A8E4437DAE217D8E36BF9E /* BrightnessHUDController.swift */; };
+		13EDE5F432057135904C0947 /* DisplayBlackoutController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8E5D0842EA834E863F1472 /* DisplayBlackoutController.swift */; };
+		1560A258006AC86E754BD109 /* KeyboardBrightnessController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C522590B75AEC97F60416 /* KeyboardBrightnessController.swift */; };
+		1AD543EB14608A4D741F6410 /* BrightnessController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC41FF1CB52837A76DF69D0 /* BrightnessController.swift */; };
+		2E323EEAB891F46097B604F7 /* MultiDisplayApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7377342926E80D58324BBA1C /* MultiDisplayApp.swift */; };
+		30E0A70C060445F57C514616 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59695C466214626A01B6672B /* MainView.swift */; };
+		3531183B37015CC460552814 /* SetupStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A1F99C1BABB962EBE87C45 /* SetupStorage.swift */; };
+		49CF82EC832637FE1AF8E67A /* RotationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1255B4F1160F8ED63B158F /* RotationController.swift */; };
+		4E37932E04C1C53E1B5ACC0B /* DisplayModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430EA98BDF0DA9F57AC2885A /* DisplayModels.swift */; };
+		7762F00F007C6F9EE945495E /* DisplayInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD6B4876CFFCFF1AF31AE65 /* DisplayInventory.swift */; };
+		9A91F91B2448CBB382EF60EB /* DisplayStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FE4199B328EF42C32BF3BBC /* DisplayStore.swift */; };
+		AA580AB096633CFD0D5ED3A4 /* AppleSiliconDDC in Frameworks */ = {isa = PBXBuildFile; productRef = 42D49B2AC8BDC0D64B906639 /* AppleSiliconDDC */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		24A8E4437DAE217D8E36BF9E /* BrightnessHUDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrightnessHUDController.swift; sourceTree = "<group>"; };
+		430EA98BDF0DA9F57AC2885A /* DisplayModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayModels.swift; sourceTree = "<group>"; };
+		59695C466214626A01B6672B /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		5CD6B4876CFFCFF1AF31AE65 /* DisplayInventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayInventory.swift; sourceTree = "<group>"; };
+		6FE4199B328EF42C32BF3BBC /* DisplayStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayStore.swift; sourceTree = "<group>"; };
+		7377342926E80D58324BBA1C /* MultiDisplayApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiDisplayApp.swift; sourceTree = "<group>"; };
+		7416E6E7FBE6069F0D891D10 /* AppleSiliconDDC */ = {isa = PBXFileReference; lastKnownFileType = folder; name = AppleSiliconDDC; path = Vendor/AppleSiliconDDC; sourceTree = SOURCE_ROOT; };
+		9EC41FF1CB52837A76DF69D0 /* BrightnessController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrightnessController.swift; sourceTree = "<group>"; };
+		B3A1F99C1BABB962EBE87C45 /* SetupStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupStorage.swift; sourceTree = "<group>"; };
+		D8A7B78BE8D6B6C6EE22312D /* MultiDisplayManagement.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MultiDisplayManagement.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE8E5D0842EA834E863F1472 /* DisplayBlackoutController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayBlackoutController.swift; sourceTree = "<group>"; };
+		FD1255B4F1160F8ED63B158F /* RotationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationController.swift; sourceTree = "<group>"; };
+		FF9C522590B75AEC97F60416 /* KeyboardBrightnessController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardBrightnessController.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DACB308F95C3C15702CECDE1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA580AB096633CFD0D5ED3A4 /* AppleSiliconDDC in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		242D174CA4E36183B52F46DF = {
+			isa = PBXGroup;
+			children = (
+				84E95A68C8EBEBF6BBAFBA09 /* Packages */,
+				26189BF4CCDE63AA459FF354 /* Sources */,
+				54BDCCDA317BF86D0641633C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		26189BF4CCDE63AA459FF354 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				9EC41FF1CB52837A76DF69D0 /* BrightnessController.swift */,
+				24A8E4437DAE217D8E36BF9E /* BrightnessHUDController.swift */,
+				EE8E5D0842EA834E863F1472 /* DisplayBlackoutController.swift */,
+				5CD6B4876CFFCFF1AF31AE65 /* DisplayInventory.swift */,
+				430EA98BDF0DA9F57AC2885A /* DisplayModels.swift */,
+				6FE4199B328EF42C32BF3BBC /* DisplayStore.swift */,
+				FF9C522590B75AEC97F60416 /* KeyboardBrightnessController.swift */,
+				59695C466214626A01B6672B /* MainView.swift */,
+				7377342926E80D58324BBA1C /* MultiDisplayApp.swift */,
+				FD1255B4F1160F8ED63B158F /* RotationController.swift */,
+				B3A1F99C1BABB962EBE87C45 /* SetupStorage.swift */,
+			);
+			name = Sources;
+			path = App/Sources;
+			sourceTree = "<group>";
+		};
+		54BDCCDA317BF86D0641633C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D8A7B78BE8D6B6C6EE22312D /* MultiDisplayManagement.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		84E95A68C8EBEBF6BBAFBA09 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				7416E6E7FBE6069F0D891D10 /* AppleSiliconDDC */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		9D9E557CC0F49B35DBBAB638 /* MultiDisplayManagement */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F2F339B2A74498CFC5A5199E /* Build configuration list for PBXNativeTarget "MultiDisplayManagement" */;
+			buildPhases = (
+				A813F88CB5F375B08F0322AE /* Sources */,
+				DACB308F95C3C15702CECDE1 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MultiDisplayManagement;
+			packageProductDependencies = (
+				42D49B2AC8BDC0D64B906639 /* AppleSiliconDDC */,
+			);
+			productName = MultiDisplayManagement;
+			productReference = D8A7B78BE8D6B6C6EE22312D /* MultiDisplayManagement.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9D7218A1A2DA2384126525A1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					9D9E557CC0F49B35DBBAB638 = {
+						DevelopmentTeam = XW848M73T3;
+						ProvisioningStyle = Manual;
+					};
+				};
+			};
+			buildConfigurationList = 8E4B63C18C2DBD6FDB0D9AB6 /* Build configuration list for PBXProject "MultiDisplayManagement" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 242D174CA4E36183B52F46DF;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				67A15D0C3A8C13B16341CBAE /* XCLocalSwiftPackageReference "Vendor/AppleSiliconDDC" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 54BDCCDA317BF86D0641633C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				9D9E557CC0F49B35DBBAB638 /* MultiDisplayManagement */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A813F88CB5F375B08F0322AE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1AD543EB14608A4D741F6410 /* BrightnessController.swift in Sources */,
+				06AEE7C1602A6B9254043952 /* BrightnessHUDController.swift in Sources */,
+				13EDE5F432057135904C0947 /* DisplayBlackoutController.swift in Sources */,
+				7762F00F007C6F9EE945495E /* DisplayInventory.swift in Sources */,
+				4E37932E04C1C53E1B5ACC0B /* DisplayModels.swift in Sources */,
+				9A91F91B2448CBB382EF60EB /* DisplayStore.swift in Sources */,
+				1560A258006AC86E754BD109 /* KeyboardBrightnessController.swift in Sources */,
+				30E0A70C060445F57C514616 /* MainView.swift in Sources */,
+				2E323EEAB891F46097B604F7 /* MultiDisplayApp.swift in Sources */,
+				49CF82EC832637FE1AF8E67A /* RotationController.swift in Sources */,
+				3531183B37015CC460552814 /* SetupStorage.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		24CDE8B2EE3148312B973952 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 5;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = XW848M73T3;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		51F2BF9CC18DEA250F6A8DE0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = NO;
+				INFOPLIST_FILE = App/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = personal.phib.MultiDisplayManagement;
+				PRODUCT_NAME = "Multi Display";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		75350EACB51A2108A0D37ECE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 5;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = XW848M73T3;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		F6FED3B58CE74934A36CC06B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = NO;
+				INFOPLIST_FILE = App/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = personal.phib.MultiDisplayManagement;
+				PRODUCT_NAME = "Multi Display";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8E4B63C18C2DBD6FDB0D9AB6 /* Build configuration list for PBXProject "MultiDisplayManagement" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75350EACB51A2108A0D37ECE /* Debug */,
+				24CDE8B2EE3148312B973952 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F2F339B2A74498CFC5A5199E /* Build configuration list for PBXNativeTarget "MultiDisplayManagement" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				51F2BF9CC18DEA250F6A8DE0 /* Debug */,
+				F6FED3B58CE74934A36CC06B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		67A15D0C3A8C13B16341CBAE /* XCLocalSwiftPackageReference "Vendor/AppleSiliconDDC" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Vendor/AppleSiliconDDC;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		42D49B2AC8BDC0D64B906639 /* AppleSiliconDDC */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AppleSiliconDDC;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 9D7218A1A2DA2384126525A1 /* Project object */;
+}
