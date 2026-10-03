@@ -24,42 +24,44 @@ struct MainView: View {
                     .foregroundStyle(.secondary)
             }
 
-            if let pending = store.pendingChange {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(pending).font(.caption).fixedSize(horizontal: false, vertical: true)
-                    HStack {
-                        Button("Keep") { store.confirmChange() }
-                            .buttonStyle(.borderedProminent)
-                        Button("Revert") { store.revertChange() }
-                    }
-                }
-                .padding(10)
-                .background(.yellow.opacity(0.18), in: RoundedRectangle(cornerRadius: 10))
-            }
-
-            if let notice = store.notice {
-                Label(notice, systemImage: "exclamationmark.triangle")
-                    .font(.caption)
-                    .foregroundStyle(.orange)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .onTapGesture { store.notice = nil }
-            }
-
-            if store.displays.isEmpty {
-                ContentUnavailableView("No displays found", systemImage: "display.2", description: Text("Open this app in your desktop session, then refresh."))
-                    .frame(height: 180)
-            } else {
-                sharedBrightness
-                keyboardBrightness
-                ScrollView {
-                    VStack(spacing: 10) {
-                        ForEach(store.displays) { display in
-                            DisplayCard(display: display)
+            ScrollView {
+                VStack(alignment: .leading, spacing: 14) {
+                    if let pending = store.pendingChange {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(pending).font(.caption).fixedSize(horizontal: false, vertical: true)
+                            HStack {
+                                Button("Keep") { store.confirmChange() }
+                                    .buttonStyle(.borderedProminent)
+                                Button("Revert") { store.revertChange() }
+                            }
                         }
+                        .padding(10)
+                        .background(.yellow.opacity(0.18), in: RoundedRectangle(cornerRadius: 10))
+                    }
+
+                    if let notice = store.notice {
+                        Label(notice, systemImage: "exclamationmark.triangle")
+                            .font(.caption)
+                            .foregroundStyle(.orange)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .onTapGesture { store.notice = nil }
+                    }
+
+                    if store.displays.isEmpty {
+                        ContentUnavailableView("No displays found", systemImage: "display.2", description: Text("Open this app in your desktop session, then refresh."))
+                            .frame(height: 180)
+                    } else {
+                        sharedBrightness
+                        keyboardBrightness
+                        VStack(spacing: 10) {
+                            ForEach(store.displays) { display in
+                                DisplayCard(display: display)
+                            }
+                        }
+                        savedSetups
                     }
                 }
-                .frame(maxHeight: 370)
-                savedSetups
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
 
             Divider()
@@ -74,7 +76,15 @@ struct MainView: View {
             }
         }
         .padding(16)
-        .frame(width: 410)
+        .frame(width: menuSize.width, height: menuSize.height)
+    }
+
+    private var menuSize: CGSize {
+        let screen = NSScreen.main?.visibleFrame.size ?? CGSize(width: 1280, height: 900)
+        return CGSize(
+            width: min(680, max(360, screen.width - 64)),
+            height: min(860, max(360, screen.height - 80))
+        )
     }
 
     private var sharedBrightness: some View {
