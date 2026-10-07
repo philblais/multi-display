@@ -164,15 +164,28 @@ private struct DisplayCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 9) {
             HStack {
-                Image(systemName: display.isBuiltIn ? "laptopcomputer" : "display")
+                Image(systemName: display.isBuiltIn ? "laptopcomputer" : display.model == .automatic ? "display" : "tv")
                 Text(display.name).font(.headline)
                 Spacer()
-                Text(display.isBuiltIn ? "Built in" : "External")
+                Text(display.isBuiltIn ? "Built in" : display.model == .automatic ? "External" : "TV")
                     .font(.caption2).foregroundStyle(.secondary)
             }
 
+            if !display.isBuiltIn {
+                Picker("Display model", selection: Binding(
+                    get: { display.profile },
+                    set: { store.setDisplayProfile(displayID: display.id, profile: $0) }
+                )) {
+                    ForEach(DisplayProfile.allCases) { profile in
+                        Text(profile.title).tag(profile)
+                    }
+                }
+                .pickerStyle(.menu)
+                .font(.caption)
+            }
+
             HStack {
-                Text("Brightness")
+                Text(display.brightnessControl == .software ? "Software dimming" : "Brightness")
                 Spacer()
                 if let value = display.brightness {
                     Text("\(Int(value * 100))%")
@@ -189,6 +202,11 @@ private struct DisplayCard: View {
                 if !editing { store.commitBrightness(displayID: display.id) }
             })
             .disabled(display.brightness == nil)
+            if display.brightnessControl == .software {
+                Text("Dims the Mac image; adjust the TV's backlight with its remote. Reveal screens clears dimming.")
+                    .font(.caption2).foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
             if let error = display.brightnessError {
                 Text(error).font(.caption2).foregroundStyle(.secondary)
             }
@@ -221,6 +239,11 @@ private struct DisplayCard: View {
 
             DisclosureGroup("Details") {
                 VStack(alignment: .leading, spacing: 3) {
+                    if let modelCode = display.model.modelCode {
+                        Text("Model code: \(modelCode)")
+                    }
+                    Text("macOS name: \(display.reportedName)")
+                    Text("Brightness control: \(display.brightnessControl.title)")
                     Text("Display ID: \(display.id)")
                     Text("Persistent ID: \(display.persistentID)")
                     Text("Mode: \(currentModeTitle)")

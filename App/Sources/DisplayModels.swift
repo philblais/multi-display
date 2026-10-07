@@ -42,13 +42,20 @@ struct DisplayModeOption: Identifiable {
 struct ManagedDisplay: Identifiable {
     let id: CGDirectDisplayID
     let persistentID: String
-    let name: String
+    let reportedName: String
     let isBuiltIn: Bool
+    let isMirrored: Bool
+    let profile: DisplayProfile
     let rotation: Int
     let modes: [DisplayModeOption]
     let currentMode: ModeSignature?
     var brightness: Double?
     var brightnessError: String?
+    var brightnessControl: BrightnessControl = .unavailable
+
+    var model: DisplayProfile { profile.resolved(reportedName: reportedName, isBuiltIn: isBuiltIn) }
+    var name: String { model == .automatic ? reportedName : model.title }
+    var supportsSoftwareDimming: Bool { model == .samsungHG50U701FNF && !isMirrored }
 }
 
 struct SavedDisplay: Codable {

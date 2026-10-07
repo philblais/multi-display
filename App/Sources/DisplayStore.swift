@@ -65,6 +65,7 @@ final class DisplayStore: ObservableObject {
 
     func scheduleRefresh() {
         blackout.hideAll()
+        brightness.suspendSoftwareDimming()
         refreshWork?.cancel()
         let work = DispatchWorkItem { [weak self] in self?.refresh() }
         refreshWork = work
@@ -74,23 +75,52 @@ final class DisplayStore: ObservableObject {
     func refresh() {
         keyboardBlockedIDs.removeAll()
         let previous = Dictionary(uniqueKeysWithValues: displays.map { ($0.persistentID, $0) })
-        displays = DisplayInventory.scan().map { display in
+        let overrides = UserDefaults.standard.dictionary(forKey: "displayProfileOverrides") as? [String: String] ?? [:]
+        displays = DisplayInventory.scan(profileOverrides: overrides).map { display in
             var copy = display
             copy.brightness = activeBlackoutIDs.contains(display.persistentID) ? 0 : previous[display.persistentID]?.brightness
+            copy.brightnessControl = previous[display.persistentID]?.brightnessControl ?? .unavailable
             return copy
         }
+        brightness.retainSoftwareDimming(for: displays)
         reconcileBlackouts()
         for display in displays {
             let revision = brightnessRevision[display.id, default: 0]
-            brightness.read(display: display) { [weak self] value, error in
+            brightness.read(display: display) { [weak self] value, control, error in
                 guard let self, let index = self.index(for: display.id) else { return }
+                guard self.displays[index].persistentID == display.persistentID else { return }
                 guard self.brightnessRevision[display.id, default: 0] == revision else { return }
                 guard !self.keyboardInFlight.contains(display.id) else { return }
                 self.displays[index].brightness = self.activeBlackoutIDs.contains(display.persistentID) ? 0 : value
                 self.displays[index].brightnessError = error
+                self.displays[index].brightnessControl = control
                 self.updateSharedBrightness()
             }
         }
+    }
+
+    func setDisplayProfile(displayID: CGDirectDisplayID, profile: DisplayProfile) {
+        guard pending == nil, pendingProfile == nil else {
+            notice = "Keep or revert the current change first."
+            return
+        }
+        guard let index = index(for: displayID), !displays[index].isBuiltIn else { return }
+        let display = displays[index]
+        guard display.profile != profile else { return }
+        brightnessRevision[displayID, default: 0] &+= 1
+        keyboardDesiredValues.removeValue(forKey: displayID)
+        updateBlackout(display: display, value: 1)
+        brightness.resetSoftwareDimming(persistentID: display.persistentID)
+        displays[index].brightness = nil
+        displays[index].brightnessControl = .unavailable
+        var overrides = UserDefaults.standard.dictionary(forKey: "displayProfileOverrides") as? [String: String] ?? [:]
+        if profile == .automatic {
+            overrides.removeValue(forKey: display.persistentID)
+        } else {
+            overrides[display.persistentID] = profile.rawValue
+        }
+        UserDefaults.standard.set(overrides, forKey: "displayProfileOverrides")
+        refresh()
     }
 
     func editBrightness(displayID: CGDirectDisplayID, value: Double) {
@@ -157,7 +187,9 @@ final class DisplayStore: ObservableObject {
     }
 
     func revealDimmedScreens() {
-        let affected = displays.filter { activeBlackoutIDs.contains($0.persistentID) }
+        let affected = displays.filter {
+            activeBlackoutIDs.contains($0.persistentID) || $0.brightnessControl == .software
+        }
         activeBlackoutIDs.removeAll()
         savedBlackoutIDs.removeAll()
         UserDefaults.standard.removeObject(forKey: "blackoutDisplayIDs")
@@ -165,12 +197,12 @@ final class DisplayStore: ObservableObject {
         hasBlackout = false
         for display in affected {
             guard let index = index(for: display.id) else { continue }
-            let recoveryLevel = 1.0 / 16.0
+            let recoveryLevel = display.brightnessControl == .software ? 1 : 1.0 / 16.0
             brightnessRevision[display.id, default: 0] &+= 1
             displays[index].brightness = recoveryLevel
             keyboardDesiredValues.removeValue(forKey: display.id)
             brightness.set(recoveryLevel, display: display) { [weak self] success in
-                if !success { self?.notice = "The black screen was cleared, but hardware brightness could not be raised for \(display.name)." }
+                if !success { self?.notice = "The black screen was cleared, but brightness could not be raised for \(display.name)." }
                 self?.refresh()
             }
         }
@@ -255,11 +287,12 @@ final class DisplayStore: ObservableObject {
                 self.notice = "Could not change brightness for \(display.name). Keyboard control for this screen is paused until Refresh."
                 self.brightnessHUD.showUnavailable(displayID: displayID, name: display.name)
                 let revision = self.brightnessRevision[displayID, default: 0]
-                self.brightness.read(display: display) { [weak self] actual, error in
+                self.brightness.read(display: display) { [weak self] actual, control, error in
                     guard let self, let index = self.index(for: displayID) else { return }
                     guard self.brightnessRevision[displayID, default: 0] == revision else { return }
                     self.displays[index].brightness = actual
                     self.displays[index].brightnessError = error
+                    self.displays[index].brightnessControl = control
                     self.updateSharedBrightness()
                 }
                 return

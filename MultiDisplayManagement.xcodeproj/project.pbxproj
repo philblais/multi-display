@@ -14,21 +14,33 @@
 		2E323EEAB891F46097B604F7 /* MultiDisplayApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7377342926E80D58324BBA1C /* MultiDisplayApp.swift */; };
 		30E0A70C060445F57C514616 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59695C466214626A01B6672B /* MainView.swift */; };
 		3531183B37015CC460552814 /* SetupStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A1F99C1BABB962EBE87C45 /* SetupStorage.swift */; };
+		36A06B6EBD78E1B987E6F793 /* DisplayModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430EA98BDF0DA9F57AC2885A /* DisplayModels.swift */; };
 		49CF82EC832637FE1AF8E67A /* RotationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1255B4F1160F8ED63B158F /* RotationController.swift */; };
+		49EED6C15036F4B30EBC51B7 /* SoftwareDimmingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4886E70ADE4F12B5C53D6986 /* SoftwareDimmingController.swift */; };
 		4E37932E04C1C53E1B5ACC0B /* DisplayModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430EA98BDF0DA9F57AC2885A /* DisplayModels.swift */; };
+		5B4E7A1B10A3091D12E9DAB3 /* SamsungBrightnessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4B0C69B1D6ACA09344180A /* SamsungBrightnessTests.swift */; };
 		7762F00F007C6F9EE945495E /* DisplayInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD6B4876CFFCFF1AF31AE65 /* DisplayInventory.swift */; };
+		850EE34874E9B5526548E92B /* AppleSiliconDDC in Frameworks */ = {isa = PBXBuildFile; productRef = A640CBE5D113B1113E45845B /* AppleSiliconDDC */; };
+		98C91DD307BEF585F9692D32 /* DisplayProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6FAE56A04D7B2F31A51303 /* DisplayProfile.swift */; };
 		9A91F91B2448CBB382EF60EB /* DisplayStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FE4199B328EF42C32BF3BBC /* DisplayStore.swift */; };
 		AA580AB096633CFD0D5ED3A4 /* AppleSiliconDDC in Frameworks */ = {isa = PBXBuildFile; productRef = 42D49B2AC8BDC0D64B906639 /* AppleSiliconDDC */; };
+		B3F80E6240CB1787004CDE65 /* DisplayProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6FAE56A04D7B2F31A51303 /* DisplayProfile.swift */; };
+		C3E071544472A662D5035B6F /* SoftwareDimmingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4886E70ADE4F12B5C53D6986 /* SoftwareDimmingController.swift */; };
+		DC6EE8DE9AA606397C2BBA39 /* BrightnessController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC41FF1CB52837A76DF69D0 /* BrightnessController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		24A8E4437DAE217D8E36BF9E /* BrightnessHUDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrightnessHUDController.swift; sourceTree = "<group>"; };
+		272FD27852E6AD39FAE880F2 /* MultiDisplayManagementTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MultiDisplayManagementTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B6FAE56A04D7B2F31A51303 /* DisplayProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayProfile.swift; sourceTree = "<group>"; };
 		430EA98BDF0DA9F57AC2885A /* DisplayModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayModels.swift; sourceTree = "<group>"; };
+		4886E70ADE4F12B5C53D6986 /* SoftwareDimmingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftwareDimmingController.swift; sourceTree = "<group>"; };
 		59695C466214626A01B6672B /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		5CD6B4876CFFCFF1AF31AE65 /* DisplayInventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayInventory.swift; sourceTree = "<group>"; };
 		6FE4199B328EF42C32BF3BBC /* DisplayStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayStore.swift; sourceTree = "<group>"; };
 		7377342926E80D58324BBA1C /* MultiDisplayApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiDisplayApp.swift; sourceTree = "<group>"; };
 		7416E6E7FBE6069F0D891D10 /* AppleSiliconDDC */ = {isa = PBXFileReference; lastKnownFileType = folder; name = AppleSiliconDDC; path = Vendor/AppleSiliconDDC; sourceTree = SOURCE_ROOT; };
+		9B4B0C69B1D6ACA09344180A /* SamsungBrightnessTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamsungBrightnessTests.swift; sourceTree = "<group>"; };
 		9EC41FF1CB52837A76DF69D0 /* BrightnessController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrightnessController.swift; sourceTree = "<group>"; };
 		B3A1F99C1BABB962EBE87C45 /* SetupStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupStorage.swift; sourceTree = "<group>"; };
 		D8A7B78BE8D6B6C6EE22312D /* MultiDisplayManagement.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MultiDisplayManagement.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -38,6 +50,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		3A3CD135DCD58FA6239F11BA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				850EE34874E9B5526548E92B /* AppleSiliconDDC in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DACB308F95C3C15702CECDE1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -54,6 +74,7 @@
 			children = (
 				84E95A68C8EBEBF6BBAFBA09 /* Packages */,
 				26189BF4CCDE63AA459FF354 /* Sources */,
+				539B460BA97C4EE5789753A2 /* Tests */,
 				54BDCCDA317BF86D0641633C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -66,21 +87,32 @@
 				EE8E5D0842EA834E863F1472 /* DisplayBlackoutController.swift */,
 				5CD6B4876CFFCFF1AF31AE65 /* DisplayInventory.swift */,
 				430EA98BDF0DA9F57AC2885A /* DisplayModels.swift */,
+				3B6FAE56A04D7B2F31A51303 /* DisplayProfile.swift */,
 				6FE4199B328EF42C32BF3BBC /* DisplayStore.swift */,
 				FF9C522590B75AEC97F60416 /* KeyboardBrightnessController.swift */,
 				59695C466214626A01B6672B /* MainView.swift */,
 				7377342926E80D58324BBA1C /* MultiDisplayApp.swift */,
 				FD1255B4F1160F8ED63B158F /* RotationController.swift */,
 				B3A1F99C1BABB962EBE87C45 /* SetupStorage.swift */,
+				4886E70ADE4F12B5C53D6986 /* SoftwareDimmingController.swift */,
 			);
 			name = Sources;
 			path = App/Sources;
+			sourceTree = "<group>";
+		};
+		539B460BA97C4EE5789753A2 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				9B4B0C69B1D6ACA09344180A /* SamsungBrightnessTests.swift */,
+			);
+			path = Tests;
 			sourceTree = "<group>";
 		};
 		54BDCCDA317BF86D0641633C /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				D8A7B78BE8D6B6C6EE22312D /* MultiDisplayManagement.app */,
+				272FD27852E6AD39FAE880F2 /* MultiDisplayManagementTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -115,6 +147,25 @@
 			productReference = D8A7B78BE8D6B6C6EE22312D /* MultiDisplayManagement.app */;
 			productType = "com.apple.product-type.application";
 		};
+		D7E46C8C54B6732D97E008DF /* MultiDisplayManagementTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4BFDE3F63047DDEAD9D10CBF /* Build configuration list for PBXNativeTarget "MultiDisplayManagementTests" */;
+			buildPhases = (
+				96BC97E2531D62E75E5C1B1C /* Sources */,
+				3A3CD135DCD58FA6239F11BA /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MultiDisplayManagementTests;
+			packageProductDependencies = (
+				A640CBE5D113B1113E45845B /* AppleSiliconDDC */,
+			);
+			productName = MultiDisplayManagementTests;
+			productReference = 272FD27852E6AD39FAE880F2 /* MultiDisplayManagementTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -125,6 +176,10 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					9D9E557CC0F49B35DBBAB638 = {
+						DevelopmentTeam = XW848M73T3;
+						ProvisioningStyle = Manual;
+					};
+					D7E46C8C54B6732D97E008DF = {
 						DevelopmentTeam = XW848M73T3;
 						ProvisioningStyle = Manual;
 					};
@@ -148,11 +203,24 @@
 			projectRoot = "";
 			targets = (
 				9D9E557CC0F49B35DBBAB638 /* MultiDisplayManagement */,
+				D7E46C8C54B6732D97E008DF /* MultiDisplayManagementTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		96BC97E2531D62E75E5C1B1C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC6EE8DE9AA606397C2BBA39 /* BrightnessController.swift in Sources */,
+				36A06B6EBD78E1B987E6F793 /* DisplayModels.swift in Sources */,
+				B3F80E6240CB1787004CDE65 /* DisplayProfile.swift in Sources */,
+				5B4E7A1B10A3091D12E9DAB3 /* SamsungBrightnessTests.swift in Sources */,
+				49EED6C15036F4B30EBC51B7 /* SoftwareDimmingController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A813F88CB5F375B08F0322AE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -162,18 +230,36 @@
 				13EDE5F432057135904C0947 /* DisplayBlackoutController.swift in Sources */,
 				7762F00F007C6F9EE945495E /* DisplayInventory.swift in Sources */,
 				4E37932E04C1C53E1B5ACC0B /* DisplayModels.swift in Sources */,
+				98C91DD307BEF585F9692D32 /* DisplayProfile.swift in Sources */,
 				9A91F91B2448CBB382EF60EB /* DisplayStore.swift in Sources */,
 				1560A258006AC86E754BD109 /* KeyboardBrightnessController.swift in Sources */,
 				30E0A70C060445F57C514616 /* MainView.swift in Sources */,
 				2E323EEAB891F46097B604F7 /* MultiDisplayApp.swift in Sources */,
 				49CF82EC832637FE1AF8E67A /* RotationController.swift in Sources */,
 				3531183B37015CC460552814 /* SetupStorage.swift in Sources */,
+				C3E071544472A662D5035B6F /* SoftwareDimmingController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		1A2D7DE984C8EF056F6D6617 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = personal.phib.MultiDisplayManagementTests;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
 		24CDE8B2EE3148312B973952 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -211,7 +297,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = XW848M73T3;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -225,7 +311,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.7;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -290,7 +376,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = XW848M73T3;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -310,7 +396,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.7;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -321,6 +407,22 @@
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
+		};
+		A33EC891ED4C6ABA86E682EE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = personal.phib.MultiDisplayManagementTests;
+				SDKROOT = macosx;
+			};
+			name = Release;
 		};
 		F6FED3B58CE74934A36CC06B /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -342,6 +444,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		4BFDE3F63047DDEAD9D10CBF /* Build configuration list for PBXNativeTarget "MultiDisplayManagementTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1A2D7DE984C8EF056F6D6617 /* Debug */,
+				A33EC891ED4C6ABA86E682EE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		8E4B63C18C2DBD6FDB0D9AB6 /* Build configuration list for PBXProject "MultiDisplayManagement" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -371,6 +482,10 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		42D49B2AC8BDC0D64B906639 /* AppleSiliconDDC */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AppleSiliconDDC;
+		};
+		A640CBE5D113B1113E45845B /* AppleSiliconDDC */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AppleSiliconDDC;
 		};

@@ -4,7 +4,7 @@ import CoreGraphics
 import Foundation
 
 enum DisplayInventory {
-    static func scan() -> [ManagedDisplay] {
+    static func scan(profileOverrides: [String: String] = [:]) -> [ManagedDisplay] {
         var ids = [CGDirectDisplayID](repeating: 0, count: 16)
         var count: UInt32 = 0
         guard CGGetOnlineDisplayList(UInt32(ids.count), &ids, &count) == .success else { return [] }
@@ -19,11 +19,14 @@ enum DisplayInventory {
                     return left.signature.refreshRate > right.signature.refreshRate
                 }
             let current = CGDisplayCopyDisplayMode(id).map(ModeSignature.init)
+            let persistentID = persistentID(for: id)
             return ManagedDisplay(
                 id: id,
-                persistentID: persistentID(for: id),
-                name: name(for: id),
+                persistentID: persistentID,
+                reportedName: name(for: id),
                 isBuiltIn: CGDisplayIsBuiltin(id) != 0,
+                isMirrored: CGDisplayIsInMirrorSet(id) != 0 || CGDisplayIsInHWMirrorSet(id) != 0,
+                profile: profileOverrides[persistentID].flatMap(DisplayProfile.init(rawValue:)) ?? .automatic,
                 rotation: Int(CGDisplayRotation(id).rounded()),
                 modes: available,
                 currentMode: current,
