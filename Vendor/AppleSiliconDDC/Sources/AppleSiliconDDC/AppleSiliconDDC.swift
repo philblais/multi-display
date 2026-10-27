@@ -13,8 +13,6 @@ public class AppleSiliconDDC: NSObject {
   #else
     public static let isArm64: Bool = false
   #endif
-  static let MAX_MATCH_SCORE: Int = 20
-
   public struct IOregService {
     public var edidUUID: String = ""
     public var manufacturerID: String = ""
@@ -41,47 +39,44 @@ public class AppleSiliconDDC: NSObject {
   }
 
   static func getServiceMatches(displayIDs: [CGDirectDisplayID]) -> [Arm64Service] {
-    let ioregServicesForMatching = self.getIoregServicesForMatching()
-    var matchedDisplayServices: [Arm64Service] = []
-    var scoredCandidateDisplayServices: [Int: [Arm64Service]] = [:]
-    for displayID in displayIDs {
-      for ioregServiceForMatching in ioregServicesForMatching {
-        let score = self.ioregMatchScore(displayID: displayID, ioregEdidUUID: ioregServiceForMatching.edidUUID, ioDisplayLocation: ioregServiceForMatching.ioDisplayLocation, ioregProductName: ioregServiceForMatching.productName, ioregSerialNumber: ioregServiceForMatching.serialNumber, serviceLocation: ioregServiceForMatching.serviceLocation)
-        let discouraged = self.checkIfDiscouraged(ioregService: ioregServiceForMatching)
-        let dummy = self.checkIfDummy(ioregService: ioregServiceForMatching)
-        let displayService = Arm64Service(displayID: displayID, service: ioregServiceForMatching.service, serviceLocation: ioregServiceForMatching.serviceLocation, discouraged: discouraged, dummy: dummy, serviceDetails: ioregServiceForMatching, matchScore: score)
-        if scoredCandidateDisplayServices[score] == nil {
-          scoredCandidateDisplayServices[score] = []
-        }
-        scoredCandidateDisplayServices[score]?.append(displayService)
+    let services = getIoregServicesForMatching()
+    // Treat multiple proxy records for one framebuffer as ambiguous rather than choosing one.
+    let locationCounts = Dictionary(grouping: services.filter { $0.service != nil }, by: \.serviceLocation).mapValues(\.count)
+    let scores: [[Int?]] = displayIDs.map { displayID in
+      services.map { service in
+        guard service.service != nil, locationCounts[service.serviceLocation] == 1 else { return nil }
+        return ioregMatchScore(displayID: displayID, ioregEdidUUID: service.edidUUID, ioDisplayLocation: service.ioDisplayLocation, ioregProductName: service.productName, ioregSerialNumber: service.serialNumber, serviceLocation: service.serviceLocation)
       }
     }
-    var takenServiceLocations: [Int] = []
-    var takenDisplayIDs: [CGDirectDisplayID] = []
-    for score in stride(from: self.MAX_MATCH_SCORE, to: 0, by: -1) {
-      if let scoredCandidateDisplayService = scoredCandidateDisplayServices[score] {
-        for candidateDisplayService in scoredCandidateDisplayService where !(takenDisplayIDs.contains(candidateDisplayService.displayID) || takenServiceLocations.contains(candidateDisplayService.serviceLocation)) {
-          takenDisplayIDs.append(candidateDisplayService.displayID)
-          takenServiceLocations.append(candidateDisplayService.serviceLocation)
-          matchedDisplayServices.append(candidateDisplayService)
-        }
-      }
+    return unambiguousMatches(scores: scores).map { match in
+      let service = services[match.serviceIndex]
+      return Arm64Service(displayID: displayIDs[match.displayIndex], service: service.service, serviceLocation: service.serviceLocation, discouraged: checkIfDiscouraged(ioregService: service), dummy: checkIfDummy(ioregService: service), serviceDetails: service, matchScore: scores[match.displayIndex][match.serviceIndex] ?? 0)
     }
-    return matchedDisplayServices
+  }
+
+  // A route must be the unique positive best match from both ends. Nil means no usable service.
+  // Equal scores cannot safely distinguish identical monitors, regardless of enumeration order.
+  static func unambiguousMatches(scores: [[Int?]]) -> [(displayIndex: Int, serviceIndex: Int)] {
+    func uniqueBestIndex(_ values: [Int?]) -> Int? {
+      guard let bestScore = values.compactMap({ $0 }).filter({ $0 > 0 }).max() else { return nil }
+      let matches = values.indices.filter { values[$0] == bestScore }
+      return matches.count == 1 ? matches[0] : nil
+    }
+    return scores.indices.compactMap { displayIndex in
+      guard let serviceIndex = uniqueBestIndex(scores[displayIndex]) else { return nil }
+      let serviceScores = scores.map { row in row.indices.contains(serviceIndex) ? row[serviceIndex] : nil }
+      guard uniqueBestIndex(serviceScores) == displayIndex else { return nil }
+      return (displayIndex, serviceIndex)
+    }
   }
 
   static public func read(service: IOAVService?, command: UInt8, writeSleepTime: UInt32? = nil, numOfWriteCycles: UInt8? = nil, readSleepTime: UInt32? = nil, numOfRetryAttemps: UInt8? = nil, retrySleepTime: UInt32? = nil) -> (current: UInt16, max: UInt16)? {
-    var values: (UInt16, UInt16)?
     var send: [UInt8] = [command]
     var reply = [UInt8](repeating: 0, count: 11)
-    if Self.performDDCCommunication(service: service, send: &send, reply: &reply, writeSleepTime: writeSleepTime, numOfWriteCycles: numOfWriteCycles, readSleepTime: readSleepTime, numOfRetryAttemps: numOfRetryAttemps, retrySleepTime: retrySleepTime) {
-      let max = UInt16(reply[6]) * 256 + UInt16(reply[7])
-      let current = UInt16(reply[8]) * 256 + UInt16(reply[9])
-      values = (current, max)
-    } else {
-      values = nil
+    guard Self.performDDCCommunication(service: service, send: &send, reply: &reply, writeSleepTime: writeSleepTime, numOfWriteCycles: numOfWriteCycles, readSleepTime: readSleepTime, numOfRetryAttemps: numOfRetryAttemps, retrySleepTime: retrySleepTime) else {
+      return nil
     }
-    return values
+    return decodeVCPReply(reply, command: command)
   }
 
   static public func write(service: IOAVService?, command: UInt8, value: UInt16, writeSleepTime: UInt32? = nil, numOfWriteCycles: UInt8? = nil, numOfRetryAttemps: UInt8? = nil, retrySleepTime: UInt32? = nil) -> Bool {
@@ -91,39 +86,59 @@ public class AppleSiliconDDC: NSObject {
   }
 
   static func performDDCCommunication(service: IOAVService?, send: inout [UInt8], reply: inout [UInt8], writeSleepTime: UInt32? = nil, numOfWriteCycles: UInt8? = nil, readSleepTime: UInt32? = nil, numOfRetryAttemps: UInt8? = nil, retrySleepTime: UInt32? = nil) -> Bool {
-    let dataAddress = ARM64_DDC_DATA_ADDRESS
-    var success = false
-    guard service != nil else {
-      return success
-    }
-    var packet: [UInt8] = [UInt8(0x80 | (send.count + 1)), UInt8(send.count)] + send + [0] // Note: the last byte is the place of the checksum, see next line!
-    packet[packet.count - 1] = self.checksum(chk: send.count == 1 ? ARM64_DDC_7BIT_ADDRESS << 1 : ARM64_DDC_7BIT_ADDRESS << 1 ^ dataAddress, data: &packet, start: 0, end: packet.count - 2)
-    for _ in 1 ... (numOfRetryAttemps ?? 4) + 1 {
-      for _ in 1 ... max((numOfWriteCycles ?? 2) + 0, 1) {
-        usleep(writeSleepTime ?? 10000)
-        success = IOAVServiceWriteI2C(service, UInt32(ARM64_DDC_7BIT_ADDRESS), UInt32(dataAddress), &packet, UInt32(packet.count)) == 0
-      }
-      if !reply.isEmpty {
-        usleep(readSleepTime ?? 50000)
-        if IOAVServiceReadI2C(service, UInt32(ARM64_DDC_7BIT_ADDRESS), UInt32(dataAddress), &reply, UInt32(reply.count)) == 0 {
-          success = self.checksum(chk: 0x50, data: &reply, start: 0, end: reply.count - 2) == reply[reply.count - 1]
-        }
-      }
-      if success {
-        return success
-      }
-      usleep(retrySleepTime ?? 20000)
-    }
-    return success
+    guard let service else { return false }
+    return performDDCCommunication(send: &send, reply: &reply, writeSleepTime: writeSleepTime, numOfWriteCycles: numOfWriteCycles, readSleepTime: readSleepTime, numOfRetryAttemps: numOfRetryAttemps, retrySleepTime: retrySleepTime, writePacket: { packet in
+      IOAVServiceWriteI2C(service, UInt32(ARM64_DDC_7BIT_ADDRESS), UInt32(ARM64_DDC_DATA_ADDRESS), &packet, UInt32(packet.count)) == 0
+    }, readReply: { buffer in
+      IOAVServiceReadI2C(service, UInt32(ARM64_DDC_7BIT_ADDRESS), UInt32(ARM64_DDC_DATA_ADDRESS), &buffer, UInt32(buffer.count)) == 0
+    }, sleep: { usleep($0) })
   }
 
-  // DDC checksum calculator
-  static func checksum(chk: UInt8, data: inout [UInt8], start: Int, end: Int) -> UInt8 {
-    var chkd: UInt8 = chk
-    for i in start ... end {
-      chkd ^= data[i]
+  // Keep packet validation and retries independent of IOKit so failures can be tested safely.
+  static func performDDCCommunication(send: inout [UInt8], reply: inout [UInt8], writeSleepTime: UInt32? = nil, numOfWriteCycles: UInt8? = nil, readSleepTime: UInt32? = nil, numOfRetryAttemps: UInt8? = nil, retrySleepTime: UInt32? = nil, writePacket: (inout [UInt8]) -> Bool, readReply: (inout [UInt8]) -> Bool, sleep: (UInt32) -> Void) -> Bool {
+    guard send.count == 1 || send.count == 3 else { return false }
+    let expectsReply = !reply.isEmpty
+    guard !expectsReply || (send.count == 1 && reply.count == 11) else { return false }
+    var packet: [UInt8] = [UInt8(0x80 | (send.count + 1)), UInt8(send.count)] + send
+    let checksumSeed = send.count == 1 ? ARM64_DDC_7BIT_ADDRESS << 1 : ARM64_DDC_7BIT_ADDRESS << 1 ^ ARM64_DDC_DATA_ADDRESS
+    packet.append(checksum(seed: checksumSeed, data: packet))
+    let attempts = Int(numOfRetryAttemps ?? 4) + 1
+    let writeCycles = max(Int(numOfWriteCycles ?? 2), 1)
+    for attempt in 0 ..< attempts {
+      // A failed or short read must never reuse bytes from a previous attempt.
+      if expectsReply { reply = [UInt8](repeating: 0, count: 11) }
+      var writeSucceeded = false
+      for _ in 0 ..< writeCycles {
+        sleep(writeSleepTime ?? 10000)
+        writeSucceeded = writePacket(&packet)
+      }
+      if writeSucceeded {
+        if !expectsReply { return true }
+        sleep(readSleepTime ?? 50000)
+        if readReply(&reply), decodeVCPReply(reply, command: send[0]) != nil {
+          return true
+        }
+      }
+      if attempt + 1 < attempts { sleep(retrySleepTime ?? 20000) }
     }
-    return chkd
+    if expectsReply { reply = [UInt8](repeating: 0, count: 11) }
+    return false
+  }
+
+  static func decodeVCPReply(_ reply: [UInt8], command: UInt8) -> (current: UInt16, max: UInt16)? {
+    // Get VCP reply: source, length, opcode, status, VCP code, type, max, current, checksum.
+    guard reply.count == 11, reply[0] == ARM64_DDC_7BIT_ADDRESS << 1,
+          reply[1] == 0x88, reply[2] == 0x02, reply[3] == 0, reply[4] == command,
+          checksum(seed: 0x50, data: Array(reply.dropLast())) == reply.last else {
+      return nil
+    }
+    let maximum = UInt16(reply[6]) << 8 | UInt16(reply[7])
+    let current = UInt16(reply[8]) << 8 | UInt16(reply[9])
+    return (current, maximum)
+  }
+
+  static func checksum(seed: UInt8, data: [UInt8]) -> UInt8 {
+    data.reduce(seed, ^)
   }
 
   static func ioregMatchScore(displayID: CGDirectDisplayID, ioregEdidUUID: String, ioDisplayLocation: String = "", ioregProductName: String = "", ioregSerialNumber: Int64 = 0, serviceLocation _: Int = 0) -> Int {
@@ -164,25 +179,23 @@ public class AppleSiliconDDC: NSObject {
     return matchScore
   }
 
-  static func ioregIterateToNextObjectOfInterest(interests: [String], iterator: inout io_iterator_t) -> (name: String, entry: io_service_t, preceedingEntry: io_service_t)? {
-    var entry: io_service_t = IO_OBJECT_NULL
-    var preceedingEntry: io_service_t = IO_OBJECT_NULL
+  // The caller owns each returned entry and must release it after use.
+  static func ioregIterateToNextObjectOfInterest(interests: [String], iterator: inout io_iterator_t) -> (name: String, entry: io_service_t)? {
     let name = UnsafeMutablePointer<CChar>.allocate(capacity: MemoryLayout<io_name_t>.size)
     defer {
       name.deallocate()
     }
     while true {
-      preceedingEntry = entry
-      entry = IOIteratorNext(iterator)
-      guard IORegistryEntryGetName(entry, name) == KERN_SUCCESS, entry != MACH_PORT_NULL else {
-        break
+      let entry = IOIteratorNext(iterator)
+      guard entry != IO_OBJECT_NULL else { return nil }
+      if IORegistryEntryGetName(entry, name) == KERN_SUCCESS {
+        let nameString = String(cString: name)
+        if interests.contains(where: { nameString.contains($0) }) {
+          return (nameString, entry)
+        }
       }
-      let nameString = String(cString: name)
-      for interest in interests where entry != IO_OBJECT_NULL && nameString.contains(interest) {
-        return (nameString, entry, preceedingEntry)
-      }
+      IOObjectRelease(entry)
     }
-    return nil
   }
 
   static func getIORegServiceAppleCDC2Properties(entry: io_service_t) -> IOregService {
@@ -191,8 +204,10 @@ public class AppleSiliconDDC: NSObject {
       ioregService.edidUUID = edidUUID
     }
     let cpath = UnsafeMutablePointer<CChar>.allocate(capacity: MemoryLayout<io_string_t>.size)
-    IORegistryEntryGetPath(entry, kIOServicePlane, cpath)
-    ioregService.ioDisplayLocation = String(cString: cpath)
+    defer { cpath.deallocate() }
+    if IORegistryEntryGetPath(entry, kIOServicePlane, cpath) == KERN_SUCCESS {
+      ioregService.ioDisplayLocation = String(cString: cpath)
+    }
     if let unmanagedDisplayAttrs = IORegistryEntryCreateCFProperty(entry, "DisplayAttributes" as CFString, kCFAllocatorDefault, IOOptionBits(kIORegistryIterateRecursively)), let displayAttrs = unmanagedDisplayAttrs.takeRetainedValue() as? NSDictionary {
       ioregService.displayAttributes = displayAttrs
       if let productAttrs = displayAttrs.value(forKey: "ProductAttributes") as? NSDictionary {
@@ -222,6 +237,8 @@ public class AppleSiliconDDC: NSObject {
   }
 
   static func setIORegServiceDCPAVServiceProxy(entry: io_service_t, ioregService: inout IOregService) {
+    ioregService.service = nil
+    ioregService.location = ""
     if let unmanagedLocation = IORegistryEntryCreateCFProperty(entry, "Location" as CFString, kCFAllocatorDefault, IOOptionBits(kIORegistryIterateRecursively)), let location = unmanagedLocation.takeRetainedValue() as? String {
       ioregService.location = location
       if location == "External" {
@@ -233,7 +250,7 @@ public class AppleSiliconDDC: NSObject {
   static public func getIoregServicesForMatching() -> [IOregService] {
     var serviceLocation = 0
     var ioregServicesForMatching: [IOregService] = []
-    let ioregRoot: io_registry_entry_t = IORegistryGetRootEntry(kIOMasterPortDefault)
+    let ioregRoot: io_registry_entry_t = IORegistryGetRootEntry(kIOMainPortDefault)
     defer {
       IOObjectRelease(ioregRoot)
     }
@@ -251,6 +268,7 @@ public class AppleSiliconDDC: NSObject {
       guard let objectOfInterest = ioregIterateToNextObjectOfInterest(interests: [keyDCPAVServiceProxy] + keysFramebuffer, iterator: &iterator) else {
         break
       }
+      defer { IOObjectRelease(objectOfInterest.entry) }
       if keysFramebuffer.contains(objectOfInterest.name) {
         ioregService = self.getIORegServiceAppleCDC2Properties(entry: objectOfInterest.entry)
         serviceLocation += 1

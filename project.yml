@@ -9,8 +9,8 @@ settings:
     CODE_SIGN_STYLE: Manual
     CODE_SIGN_IDENTITY: Apple Development
     DEVELOPMENT_TEAM: XW848M73T3
-    MARKETING_VERSION: "1.7"
-    CURRENT_PROJECT_VERSION: "8"
+    MARKETING_VERSION: "1.8"
+    CURRENT_PROJECT_VERSION: "9"
 packages:
   AppleSiliconDDC:
     path: Vendor/AppleSiliconDDC
@@ -40,13 +40,13 @@ targets:
     platform: macOS
     sources:
       - path: Tests
-      - path: App/Sources/DisplayProfile.swift
-      - path: App/Sources/DisplayModels.swift
-      - path: App/Sources/BrightnessController.swift
-      - path: App/Sources/SoftwareDimmingController.swift
+      - path: App/Sources
+        excludes:
+          - MultiDisplayApp.swift
     settings:
       base:
         GENERATE_INFOPLIST_FILE: YES
+        ENABLE_TESTABILITY: YES
     dependencies:
       - package: AppleSiliconDDC
 schemes:

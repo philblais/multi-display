@@ -24,15 +24,16 @@ final class KeyboardBrightnessController {
     private var tap: CFMachPort?
     private var source: CFRunLoopSource?
     private var targetsByKey: [Int: CGDirectDisplayID] = [:]
+    private let displaySelector: ((KeyboardDisplayTarget) -> CGDirectDisplayID?)?
+
+    init(displaySelector: ((KeyboardDisplayTarget) -> CGDirectDisplayID?)? = nil) {
+        self.displaySelector = displaySelector
+    }
 
     var isRunning: Bool { tap.map(CGEvent.tapIsEnabled(tap:)) ?? false }
     var canRecover: Bool { isRunning && AXIsProcessTrusted() }
 
     func start(promptForPermission: Bool) -> Bool {
-        if let tap {
-            CGEvent.tapEnable(tap: tap, enable: true)
-            return CGEvent.tapIsEnabled(tap: tap)
-        }
         let trusted: Bool
         if promptForPermission {
             let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
@@ -40,7 +41,17 @@ final class KeyboardBrightnessController {
         } else {
             trusted = AXIsProcessTrusted()
         }
-        guard trusted else { return false }
+        guard trusted else {
+            stop()
+            return false
+        }
+        if let tap {
+            if CFMachPortIsValid(tap) {
+                CGEvent.tapEnable(tap: tap, enable: true)
+                if CGEvent.tapIsEnabled(tap: tap) { return true }
+            }
+            stop()
+        }
 
         // NX_SYSDEFINED is 14. Only media-key events enter this active filter.
         guard let port = CGEvent.tapCreate(
@@ -70,8 +81,9 @@ final class KeyboardBrightnessController {
 
     deinit { stop() }
 
-    fileprivate func handle(type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
+    func handle(type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
         if type == .tapDisabledByTimeout || type == .tapDisabledByUserInput {
+            targetsByKey.removeAll()
             if let tap { CGEvent.tapEnable(tap: tap, enable: true) }
             return Unmanaged.passUnretained(event)
         }
@@ -91,6 +103,8 @@ final class KeyboardBrightnessController {
         let modifiers = mediaEvent.modifierFlags
         let direction = key == 2 ? 1 : -1
         let fineStep = modifiers.contains(.option) && modifiers.contains(.shift)
+        // A missed key-up must not latch a later physical press to the old screen.
+        if data & 1 == 0 { targetsByKey.removeValue(forKey: key) }
         if let latchedDisplayID = targetsByKey[key] {
             if canControl?(latchedDisplayID) == true {
                 DispatchQueue.main.async { [weak self] in self?.adjust?(latchedDisplayID, direction, fineStep) }
@@ -110,6 +124,7 @@ final class KeyboardBrightnessController {
     }
 
     private func selectedDisplayID() -> CGDirectDisplayID? {
+        if let displaySelector { return displaySelector(target) }
         let screen: NSScreen?
         switch target {
         case .pointer:

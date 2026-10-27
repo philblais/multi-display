@@ -7,29 +7,43 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03E8C941DABA2E4F2AC3CEFE /* SetupStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A1F99C1BABB962EBE87C45 /* SetupStorage.swift */; };
 		06AEE7C1602A6B9254043952 /* BrightnessHUDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A8E4437DAE217D8E36BF9E /* BrightnessHUDController.swift */; };
+		08A83D390AB52A28E899194E /* DisplayStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FE4199B328EF42C32BF3BBC /* DisplayStore.swift */; };
+		0E614960DF194983E8D7B337 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59695C466214626A01B6672B /* MainView.swift */; };
 		13EDE5F432057135904C0947 /* DisplayBlackoutController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8E5D0842EA834E863F1472 /* DisplayBlackoutController.swift */; };
 		1560A258006AC86E754BD109 /* KeyboardBrightnessController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C522590B75AEC97F60416 /* KeyboardBrightnessController.swift */; };
+		1636F68260E4F75E0AB2FDC3 /* DisplayInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD6B4876CFFCFF1AF31AE65 /* DisplayInventory.swift */; };
 		1AD543EB14608A4D741F6410 /* BrightnessController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC41FF1CB52837A76DF69D0 /* BrightnessController.swift */; };
 		2E323EEAB891F46097B604F7 /* MultiDisplayApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7377342926E80D58324BBA1C /* MultiDisplayApp.swift */; };
 		30E0A70C060445F57C514616 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59695C466214626A01B6672B /* MainView.swift */; };
 		3531183B37015CC460552814 /* SetupStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A1F99C1BABB962EBE87C45 /* SetupStorage.swift */; };
 		36A06B6EBD78E1B987E6F793 /* DisplayModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430EA98BDF0DA9F57AC2885A /* DisplayModels.swift */; };
+		3F488B3A081529BC60291980 /* BrightnessHUDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A8E4437DAE217D8E36BF9E /* BrightnessHUDController.swift */; };
 		49CF82EC832637FE1AF8E67A /* RotationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1255B4F1160F8ED63B158F /* RotationController.swift */; };
 		49EED6C15036F4B30EBC51B7 /* SoftwareDimmingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4886E70ADE4F12B5C53D6986 /* SoftwareDimmingController.swift */; };
 		4E37932E04C1C53E1B5ACC0B /* DisplayModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430EA98BDF0DA9F57AC2885A /* DisplayModels.swift */; };
 		5B4E7A1B10A3091D12E9DAB3 /* SamsungBrightnessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4B0C69B1D6ACA09344180A /* SamsungBrightnessTests.swift */; };
+		61DCE8AC19F2C8EC5E2EA395 /* RotationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1255B4F1160F8ED63B158F /* RotationController.swift */; };
 		7762F00F007C6F9EE945495E /* DisplayInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD6B4876CFFCFF1AF31AE65 /* DisplayInventory.swift */; };
+		7BCE4DCE0F4140997BDB34E7 /* DisplayModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26B57D6B2DCE6F45DEA1A2E /* DisplayModelTests.swift */; };
+		7F3000DE5A4F915384BC29FB /* RotationControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75D188C6368309E8DEEF0F7 /* RotationControllerTests.swift */; };
 		850EE34874E9B5526548E92B /* AppleSiliconDDC in Frameworks */ = {isa = PBXBuildFile; productRef = A640CBE5D113B1113E45845B /* AppleSiliconDDC */; };
 		98C91DD307BEF585F9692D32 /* DisplayProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6FAE56A04D7B2F31A51303 /* DisplayProfile.swift */; };
 		9A91F91B2448CBB382EF60EB /* DisplayStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FE4199B328EF42C32BF3BBC /* DisplayStore.swift */; };
+		A38A8C79D0B716016570E9C4 /* KeyboardBrightnessController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C522590B75AEC97F60416 /* KeyboardBrightnessController.swift */; };
 		AA580AB096633CFD0D5ED3A4 /* AppleSiliconDDC in Frameworks */ = {isa = PBXBuildFile; productRef = 42D49B2AC8BDC0D64B906639 /* AppleSiliconDDC */; };
 		B3F80E6240CB1787004CDE65 /* DisplayProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6FAE56A04D7B2F31A51303 /* DisplayProfile.swift */; };
 		C3E071544472A662D5035B6F /* SoftwareDimmingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4886E70ADE4F12B5C53D6986 /* SoftwareDimmingController.swift */; };
+		D20110E4E682B1F0E19A5414 /* DisplayStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827653E114E5F0862CA0B007 /* DisplayStoreTests.swift */; };
+		DBC3FC9150B47042F9C3EBDB /* DisplayBlackoutController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8E5D0842EA834E863F1472 /* DisplayBlackoutController.swift */; };
 		DC6EE8DE9AA606397C2BBA39 /* BrightnessController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC41FF1CB52837A76DF69D0 /* BrightnessController.swift */; };
+		E6B7F1C545121DD87EA26D4A /* DDCTransportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53CA3FEE59F1653ECD72945 /* DDCTransportTests.swift */; };
+		F7C216D3BE410BFC49B2FF95 /* KeyboardBrightnessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07CA7D7B743F62E8D7A146DB /* KeyboardBrightnessTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		07CA7D7B743F62E8D7A146DB /* KeyboardBrightnessTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardBrightnessTests.swift; sourceTree = "<group>"; };
 		24A8E4437DAE217D8E36BF9E /* BrightnessHUDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrightnessHUDController.swift; sourceTree = "<group>"; };
 		272FD27852E6AD39FAE880F2 /* MultiDisplayManagementTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MultiDisplayManagementTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B6FAE56A04D7B2F31A51303 /* DisplayProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayProfile.swift; sourceTree = "<group>"; };
@@ -40,9 +54,13 @@
 		6FE4199B328EF42C32BF3BBC /* DisplayStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayStore.swift; sourceTree = "<group>"; };
 		7377342926E80D58324BBA1C /* MultiDisplayApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiDisplayApp.swift; sourceTree = "<group>"; };
 		7416E6E7FBE6069F0D891D10 /* AppleSiliconDDC */ = {isa = PBXFileReference; lastKnownFileType = folder; name = AppleSiliconDDC; path = Vendor/AppleSiliconDDC; sourceTree = SOURCE_ROOT; };
+		827653E114E5F0862CA0B007 /* DisplayStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayStoreTests.swift; sourceTree = "<group>"; };
 		9B4B0C69B1D6ACA09344180A /* SamsungBrightnessTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamsungBrightnessTests.swift; sourceTree = "<group>"; };
 		9EC41FF1CB52837A76DF69D0 /* BrightnessController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrightnessController.swift; sourceTree = "<group>"; };
+		A75D188C6368309E8DEEF0F7 /* RotationControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationControllerTests.swift; sourceTree = "<group>"; };
+		B26B57D6B2DCE6F45DEA1A2E /* DisplayModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayModelTests.swift; sourceTree = "<group>"; };
 		B3A1F99C1BABB962EBE87C45 /* SetupStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupStorage.swift; sourceTree = "<group>"; };
+		C53CA3FEE59F1653ECD72945 /* DDCTransportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDCTransportTests.swift; sourceTree = "<group>"; };
 		D8A7B78BE8D6B6C6EE22312D /* MultiDisplayManagement.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MultiDisplayManagement.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE8E5D0842EA834E863F1472 /* DisplayBlackoutController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayBlackoutController.swift; sourceTree = "<group>"; };
 		FD1255B4F1160F8ED63B158F /* RotationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationController.swift; sourceTree = "<group>"; };
@@ -103,6 +121,11 @@
 		539B460BA97C4EE5789753A2 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				C53CA3FEE59F1653ECD72945 /* DDCTransportTests.swift */,
+				B26B57D6B2DCE6F45DEA1A2E /* DisplayModelTests.swift */,
+				827653E114E5F0862CA0B007 /* DisplayStoreTests.swift */,
+				07CA7D7B743F62E8D7A146DB /* KeyboardBrightnessTests.swift */,
+				A75D188C6368309E8DEEF0F7 /* RotationControllerTests.swift */,
 				9B4B0C69B1D6ACA09344180A /* SamsungBrightnessTests.swift */,
 			);
 			path = Tests;
@@ -214,9 +237,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				DC6EE8DE9AA606397C2BBA39 /* BrightnessController.swift in Sources */,
+				3F488B3A081529BC60291980 /* BrightnessHUDController.swift in Sources */,
+				E6B7F1C545121DD87EA26D4A /* DDCTransportTests.swift in Sources */,
+				DBC3FC9150B47042F9C3EBDB /* DisplayBlackoutController.swift in Sources */,
+				1636F68260E4F75E0AB2FDC3 /* DisplayInventory.swift in Sources */,
+				7BCE4DCE0F4140997BDB34E7 /* DisplayModelTests.swift in Sources */,
 				36A06B6EBD78E1B987E6F793 /* DisplayModels.swift in Sources */,
 				B3F80E6240CB1787004CDE65 /* DisplayProfile.swift in Sources */,
+				08A83D390AB52A28E899194E /* DisplayStore.swift in Sources */,
+				D20110E4E682B1F0E19A5414 /* DisplayStoreTests.swift in Sources */,
+				A38A8C79D0B716016570E9C4 /* KeyboardBrightnessController.swift in Sources */,
+				F7C216D3BE410BFC49B2FF95 /* KeyboardBrightnessTests.swift in Sources */,
+				0E614960DF194983E8D7B337 /* MainView.swift in Sources */,
+				61DCE8AC19F2C8EC5E2EA395 /* RotationController.swift in Sources */,
+				7F3000DE5A4F915384BC29FB /* RotationControllerTests.swift in Sources */,
 				5B4E7A1B10A3091D12E9DAB3 /* SamsungBrightnessTests.swift in Sources */,
+				03E8C941DABA2E4F2AC3CEFE /* SetupStorage.swift in Sources */,
 				49EED6C15036F4B30EBC51B7 /* SoftwareDimmingController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -249,6 +285,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_TESTABILITY = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -297,7 +334,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = XW848M73T3;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -311,7 +348,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -376,7 +413,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = XW848M73T3;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -396,7 +433,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -413,6 +450,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_TESTABILITY = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

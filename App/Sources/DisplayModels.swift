@@ -17,9 +17,13 @@ struct ModeSignature: Codable, Equatable {
     }
 
     func matches(_ mode: CGDisplayMode) -> Bool {
-        width == mode.width && height == mode.height &&
-        pixelWidth == mode.pixelWidth && pixelHeight == mode.pixelHeight &&
-        abs(refreshRate - mode.refreshRate) < 0.5
+        matches(ModeSignature(mode))
+    }
+
+    func matches(_ other: ModeSignature) -> Bool {
+        width == other.width && height == other.height &&
+        pixelWidth == other.pixelWidth && pixelHeight == other.pixelHeight &&
+        abs(refreshRate - other.refreshRate) < 0.01
     }
 }
 

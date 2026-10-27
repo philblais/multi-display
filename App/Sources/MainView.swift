@@ -26,6 +26,10 @@ struct MainView: View {
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 14) {
+                    if store.isApplyingConfiguration {
+                        ProgressView("Applying display settings…")
+                            .font(.caption)
+                    }
                     if let pending = store.pendingChange {
                         VStack(alignment: .leading, spacing: 8) {
                             Text(pending).font(.caption).fixedSize(horizontal: false, vertical: true)
@@ -92,13 +96,14 @@ struct MainView: View {
             HStack {
                 Label("All screens", systemImage: "sun.max")
                 Spacer()
-                Text("\(Int(store.sharedBrightness * 100))%")
+                Text("\(Int((store.sharedBrightness * 100).rounded()))%")
                     .monospacedDigit().foregroundStyle(.secondary)
             }
             Slider(value: $store.sharedBrightness, in: 0...1, onEditingChanged: { editing in
+                store.setSharedBrightnessEditing(editing)
                 if !editing { store.commitSharedBrightness() }
             })
-            .disabled(!store.displays.contains { $0.brightness != nil })
+            .disabled(store.configurationLocked || !store.displays.contains { $0.brightness != nil })
         }
     }
 
@@ -136,13 +141,14 @@ struct MainView: View {
                     .textFieldStyle(.roundedBorder)
                     .onSubmit(save)
                 Button("Save") { save() }
-                    .disabled(setupName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    .disabled(store.configurationLocked || setupName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
             ForEach(store.setups) { setup in
                 HStack {
                     Text(setup.name).lineLimit(1)
                     Spacer()
                     Button("Apply") { store.applySetup(setup) }
+                        .disabled(store.configurationLocked)
                     Button { store.deleteSetup(setup) } label: { Image(systemName: "trash") }
                         .buttonStyle(.borderless)
                         .help("Delete setup")
@@ -182,13 +188,14 @@ private struct DisplayCard: View {
                 }
                 .pickerStyle(.menu)
                 .font(.caption)
+                .disabled(store.configurationLocked)
             }
 
             HStack {
                 Text(display.brightnessControl == .software ? "Software dimming" : "Brightness")
                 Spacer()
                 if let value = display.brightness {
-                    Text("\(Int(value * 100))%")
+                    Text("\(Int((value * 100).rounded()))%")
                         .monospacedDigit().foregroundStyle(.secondary)
                 } else {
                     Text("Unavailable").foregroundStyle(.secondary)
@@ -201,7 +208,7 @@ private struct DisplayCard: View {
             ), in: 0...1, onEditingChanged: { editing in
                 if !editing { store.commitBrightness(displayID: display.id) }
             })
-            .disabled(display.brightness == nil)
+            .disabled(store.configurationLocked || display.brightness == nil)
             if display.brightnessControl == .software {
                 Text("Dims the Mac image; adjust the TV's backlight with its remote. Reveal screens clears dimming.")
                     .font(.caption2).foregroundStyle(.secondary)
@@ -221,7 +228,7 @@ private struct DisplayCard: View {
                 } label: {
                     Text(currentModeTitle).lineLimit(1)
                 }
-                .disabled(display.modes.isEmpty)
+                .disabled(store.configurationLocked || display.modes.isEmpty)
             }
 
             HStack {
@@ -234,7 +241,7 @@ private struct DisplayCard: View {
                 } label: {
                     Text("\(display.rotation)°")
                 }
-                .disabled(display.isBuiltIn)
+                .disabled(store.configurationLocked || display.isBuiltIn)
             }
 
             DisclosureGroup("Details") {

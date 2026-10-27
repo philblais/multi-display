@@ -102,6 +102,242 @@ final class SamsungBrightnessTests: XCTestCase {
         XCTAssertTrue(software.levels.isEmpty)
     }
 
+    func testDisconnectCancelsPendingInitialReadAndReconnectRetriesDDC() {
+        let software = FakeSoftwareBrightness()
+        let requested = expectation(description: "Initial DDC read started")
+        let release = DispatchSemaphore(value: 0)
+        var reads = 0
+        let controller = BrightnessController(software: software, ddcRead: { _ in
+            reads += 1
+            if reads == 1 {
+                requested.fulfill()
+                release.wait()
+                return nil
+            }
+            return 0.8
+        })
+        let display = makeDisplay()
+        var staleDelivered = false
+        controller.read(display: display) { _, _, _ in staleDelivered = true }
+        wait(for: [requested], timeout: 2)
+
+        controller.retainSoftwareDimming(for: [])
+        controller.retainSoftwareDimming(for: [display])
+        release.signal()
+        let reconnected = read(controller, display)
+
+        XCTAssertFalse(staleDelivered)
+        XCTAssertEqual(reconnected.value, 0.8)
+        XCTAssertEqual(reconnected.control, .ddc)
+        XCTAssertEqual(reads, 2)
+        XCTAssertTrue(software.levels.isEmpty)
+    }
+
+    func testConnectionIdentityChangesCancelPendingFallback() {
+        let replacements = [
+            makeDisplay(id: 84),
+            makeDisplay(isMirrored: true),
+            makeDisplay(profile: .automatic),
+            makeDisplay(name: "Different reported display name")
+        ]
+        for replacement in replacements {
+            let software = FakeSoftwareBrightness()
+            let requested = expectation(description: "Old connection read started")
+            let release = DispatchSemaphore(value: 0)
+            var reads = 0
+            let controller = BrightnessController(software: software, ddcRead: { _ in
+                reads += 1
+                if reads == 1 {
+                    requested.fulfill()
+                    release.wait()
+                    return nil
+                }
+                return 0.6
+            })
+            var staleDelivered = false
+            controller.read(display: makeDisplay()) { _, _, _ in staleDelivered = true }
+            wait(for: [requested], timeout: 2)
+
+            controller.retainSoftwareDimming(for: [replacement])
+            release.signal()
+            let updated = read(controller, replacement)
+
+            XCTAssertFalse(staleDelivered)
+            XCTAssertEqual(updated.value, 0.6)
+            XCTAssertEqual(updated.control, .ddc)
+            XCTAssertTrue(software.levels.isEmpty)
+        }
+    }
+
+    func testSoftwareReadQueuedBeforeWriteCannotOverwriteNewLevel() {
+        let software = FakeSoftwareBrightness()
+        let controller = BrightnessController(software: software, ddcRead: { _ in nil })
+        let display = makeDisplay()
+        XCTAssertEqual(read(controller, display).control, .software)
+        var staleDelivered = false
+
+        controller.read(display: display) { _, _, _ in staleDelivered = true }
+        set(controller, 0.2, display)
+
+        XCTAssertFalse(staleDelivered)
+        XCTAssertEqual(software.levels[display.persistentID], 0.2)
+        XCTAssertEqual(read(controller, display).value, 0.2)
+    }
+
+    func testWriteCancelsPendingReadBeforeItCreatesSoftwareFallback() {
+        let software = FakeSoftwareBrightness()
+        let requested = expectation(description: "DDC read started")
+        let release = DispatchSemaphore(value: 0)
+        var written: Double?
+        let controller = BrightnessController(software: software, ddcRead: { _ in
+            requested.fulfill()
+            release.wait()
+            return nil
+        }, ddcSet: { value, _ in written = value; return true })
+        let display = makeDisplay()
+        var staleDelivered = false
+        controller.read(display: display) { _, _, _ in staleDelivered = true }
+        wait(for: [requested], timeout: 2)
+
+        let completed = expectation(description: "New write finished")
+        controller.set(0.3, display: display) { success in
+            XCTAssertTrue(success)
+            completed.fulfill()
+        }
+        release.signal()
+        wait(for: [completed], timeout: 2)
+
+        XCTAssertFalse(staleDelivered)
+        XCTAssertEqual(written, 0.3)
+        XCTAssertTrue(software.levels.isEmpty)
+    }
+
+    func testBrightnessReadsRejectNonFiniteAndClampOutOfRangeValues() {
+        let unknown = makeDisplay(name: "Unknown", profile: .automatic)
+        for value in [Double.nan, .infinity, -.infinity] {
+            let controller = BrightnessController(ddcRead: { _ in value })
+            let reading = read(controller, unknown)
+            XCTAssertNil(reading.value)
+            XCTAssertEqual(reading.control, .unavailable)
+        }
+        for (transport, expected) in [(-0.5, 0.0), (1.5, 1.0)] {
+            let controller = BrightnessController(ddcRead: { _ in transport })
+            XCTAssertEqual(read(controller, unknown).value, expected)
+        }
+    }
+
+    func testDisconnectCancelsQueuedHardwareWriteBeforeReusedDisplayIDIsTouched() {
+        let software = FakeSoftwareBrightness()
+        let requested = expectation(description: "Read blocks the hardware queue")
+        let release = DispatchSemaphore(value: 0)
+        var writes: [Double] = []
+        let controller = BrightnessController(software: software, ddcRead: { _ in
+            requested.fulfill()
+            release.wait()
+            return nil
+        }, ddcSet: { value, _ in writes.append(value); return true })
+        let display = makeDisplay()
+        var staleReadDelivered = false
+        controller.read(display: display) { _, _, _ in staleReadDelivered = true }
+        wait(for: [requested], timeout: 2)
+        let canceled = expectation(description: "Canceled queued write still completes")
+        controller.set(0.3, display: display) { success in
+            XCTAssertFalse(success)
+            canceled.fulfill()
+        }
+
+        controller.retainSoftwareDimming(for: [])
+        controller.retainSoftwareDimming(for: [display])
+        release.signal()
+        wait(for: [canceled], timeout: 2)
+
+        XCTAssertTrue(writes.isEmpty)
+        XCTAssertFalse(staleReadDelivered)
+        XCTAssertTrue(software.levels.isEmpty)
+        set(controller, 0.7, display)
+        XCTAssertEqual(writes, [0.7])
+    }
+
+    func testNewerWriteOnSameConnectionDoesNotCancelEarlierQueuedWrite() {
+        let requested = expectation(description: "Read blocks the hardware queue")
+        let release = DispatchSemaphore(value: 0)
+        var writes: [Double] = []
+        let controller = BrightnessController(ddcRead: { _ in
+            requested.fulfill()
+            release.wait()
+            return nil
+        }, ddcSet: { value, _ in writes.append(value); return true })
+        let display = makeDisplay()
+        controller.read(display: display) { _, _, _ in XCTFail("The read precedes newer writes") }
+        wait(for: [requested], timeout: 2)
+        let written = expectation(description: "Both queued writes complete")
+        written.expectedFulfillmentCount = 2
+        for value in [0.3, 0.7] {
+            controller.set(value, display: display) { success in
+                XCTAssertTrue(success)
+                written.fulfill()
+            }
+        }
+        release.signal()
+        wait(for: [written], timeout: 2)
+
+        XCTAssertEqual(writes, [0.3, 0.7])
+    }
+
+    func testLaterReadDoesNotDropPendingWriteCompletion() {
+        let requested = expectation(description: "DDC write started")
+        let release = DispatchSemaphore(value: 0)
+        let controller = BrightnessController(ddcRead: { _ in 0.7 }, ddcSet: { _, _ in
+            requested.fulfill()
+            release.wait()
+            return true
+        })
+        let display = makeDisplay()
+        let written = expectation(description: "Pending write still completes")
+        controller.set(0.7, display: display) { success in
+            XCTAssertTrue(success)
+            written.fulfill()
+        }
+        wait(for: [requested], timeout: 2)
+        let refreshed = expectation(description: "Later read completes")
+        controller.read(display: display) { value, _, _ in
+            XCTAssertEqual(value, 0.7)
+            refreshed.fulfill()
+        }
+        release.signal()
+        wait(for: [written, refreshed], timeout: 2)
+    }
+
+    func testConnectionChangeDoesNotReuseStaleSoftwareControlSnapshot() {
+        let software = FakeSoftwareBrightness()
+        var written: Double?
+        let controller = BrightnessController(software: software, ddcRead: { _ in nil }, ddcSet: { value, _ in
+            written = value
+            return true
+        })
+        XCTAssertEqual(read(controller, makeDisplay()).control, .software)
+        var replacement = makeDisplay(id: 84)
+        replacement.brightnessControl = .software
+
+        controller.retainSoftwareDimming(for: [replacement])
+        set(controller, 0.7, replacement)
+
+        XCTAssertEqual(written, 0.7)
+        XCTAssertTrue(software.levels.isEmpty)
+    }
+
+    func testBrightnessWriteRejectsNonFiniteValueWithoutCallingTransport() {
+        var writes = 0
+        let controller = BrightnessController(ddcSet: { _, _ in writes += 1; return true })
+        let completed = expectation(description: "Invalid write rejected")
+        controller.set(.nan, display: makeDisplay()) { success in
+            XCTAssertFalse(success)
+            completed.fulfill()
+        }
+        wait(for: [completed], timeout: 2)
+        XCTAssertEqual(writes, 0)
+    }
+
     func testLegacySavedSetupStillDecodes() throws {
         let json = """
         [{"id":"907EB13C-0B31-4A2B-AB34-F7F4F3EAA844","name":"Desk","displays":[{"persistentID":"lg","name":"LG","brightness":0.5,"rotation":90}]}]
@@ -111,9 +347,9 @@ final class SamsungBrightnessTests: XCTestCase {
         XCTAssertEqual(setup?.displays.first?.rotation, 90)
     }
 
-    private func makeDisplay(name: String = "HG50U701FNF", profile: DisplayProfile = .samsungHG50U701FNF,
+    private func makeDisplay(id: CGDirectDisplayID = 42, name: String = "HG50U701FNF", profile: DisplayProfile = .samsungHG50U701FNF,
                              isBuiltIn: Bool = false, isMirrored: Bool = false) -> ManagedDisplay {
-        ManagedDisplay(id: 42, persistentID: "test-samsung", reportedName: name, isBuiltIn: isBuiltIn,
+        ManagedDisplay(id: id, persistentID: "test-samsung", reportedName: name, isBuiltIn: isBuiltIn,
                        isMirrored: isMirrored, profile: profile, rotation: 0, modes: [], currentMode: nil,
                        brightness: nil, brightnessError: nil)
     }

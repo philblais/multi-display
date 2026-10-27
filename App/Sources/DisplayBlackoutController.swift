@@ -27,6 +27,11 @@ final class DisplayBlackoutController {
             dismissPanels(for: display)
             return
         }
+        guard !display.isMirrored, CGDisplayIsInMirrorSet(display.id) == 0,
+              CGDisplayIsInHWMirrorSet(display.id) == 0 else {
+            dismissPanels(for: display)
+            return
+        }
         guard let screen = NSScreen.screens.first(where: {
             ($0.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID) == display.id
         }) else { return }
